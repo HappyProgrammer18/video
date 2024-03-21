@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			accelerometer
+		</title>
+		<style>
+            canvas{
+                width: 80vmin;
+                border: 2px black solid;
+            }
+        </style>
+		<script>
+		var VIDEO_CANVAS=null;
+       function main(){
+        const video1=initializeVideo("video2.mp4");
+        const video2=initializeVideo("video1.mp4");
+        VIDEO_CANVAS=document.getElementById('video');
+        video1.addEventListener('loadeddata',(event)=>{
+            const context=VIDEO_CANVAS.getContext("2d");
+            context.canvas.width=video1.videoWidth;
+            context.canvas.height=video1.videoHeight;
+            processingVideos(video1,video2,0,0);
+        });
+       }
+       function processingVideos(video1,video2,frame1,frame2){
+      
+        showVideoFrame(video1,frame1);
+        frame1++;
+        showFrameNumbers(frame1,frame2);
+        setTimeout(function(){
+            processingVideos(video1,video2,frame1,frame2);
+        },30);
+       }
+
+       function showVideoFrame(video,frame){
+        var time=frame/30;
+        video.currentTime=time;
+        const context=VIDEO_CANVAS.getContext("2d");
+        context.drawImage(video,0,0,VIDEO_CANVAS.width,VIDEO_CANVAS.height);
+    }
+
+    function showFrameNumbers(frame1,frame2){
+        const context=VIDEO_CANVAS.getContext("2d");
+        context.font="30px Arial";
+        context.textAlign="left";
+        context.textBaseLine="top";
+        context.fillStyle="black";
+        context.fillText(frame1+", "+frame2,0,0);
+    }
+
+
+
+
+       function initializeVideo(filename){
+        var video=document.createElement('video');
+        video.src=filename;
+        video.load();
+        return video;
+       }
+
+		</script>
+	</head>
+<body onload="main()">
+    <center>
+        <h1>video</h1>
+        <canvas id="video"></canvas>
+    </center>
+
+
+
+
+</body>
+</html>
